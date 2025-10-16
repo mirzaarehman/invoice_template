@@ -1,29 +1,68 @@
-export interface BusinessDetails {
-  businessName: string;
-  businessAddress: string;
-  businessEmail: string;
-  businessPhone: string;
+export interface Business {
+  id: string;
+  name: string;
+  address: string;
+  phone?: string;
   currency: string;
 }
 
-const STORAGE_KEY = "invoice_business_details";
+const BUSINESSES_KEY = "invoice_businesses";
+const SELECTED_BUSINESS_KEY = "invoice_selected_business_id";
 
-export function saveBusinessDetails(details: BusinessDetails): void {
+export function saveBusinesses(businesses: Business[]): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(details));
+    localStorage.setItem(BUSINESSES_KEY, JSON.stringify(businesses));
   } catch (error) {
-    console.error("Failed to save business details:", error);
+    console.error("Failed to save businesses:", error);
   }
 }
 
-export function loadBusinessDetails(): BusinessDetails | null {
+export function loadBusinesses(): Business[] {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(BUSINESSES_KEY);
     if (stored) {
       return JSON.parse(stored);
     }
   } catch (error) {
-    console.error("Failed to load business details:", error);
+    console.error("Failed to load businesses:", error);
+  }
+  return [];
+}
+
+export function saveSelectedBusinessId(id: string): void {
+  try {
+    localStorage.setItem(SELECTED_BUSINESS_KEY, id);
+  } catch (error) {
+    console.error("Failed to save selected business ID:", error);
+  }
+}
+
+export function loadSelectedBusinessId(): string | null {
+  try {
+    return localStorage.getItem(SELECTED_BUSINESS_KEY);
+  } catch (error) {
+    console.error("Failed to load selected business ID:", error);
   }
   return null;
+}
+
+export function addBusiness(business: Business): void {
+  const businesses = loadBusinesses();
+  businesses.push(business);
+  saveBusinesses(businesses);
+}
+
+export function updateBusiness(updatedBusiness: Business): void {
+  const businesses = loadBusinesses();
+  const index = businesses.findIndex(b => b.id === updatedBusiness.id);
+  if (index !== -1) {
+    businesses[index] = updatedBusiness;
+    saveBusinesses(businesses);
+  }
+}
+
+export function deleteBusiness(id: string): void {
+  const businesses = loadBusinesses();
+  const filtered = businesses.filter(b => b.id !== id);
+  saveBusinesses(filtered);
 }

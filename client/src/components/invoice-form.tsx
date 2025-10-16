@@ -1,4 +1,4 @@
-import { Invoice, LineItem } from "@shared/schema";
+import { Invoice, LineItem } from "@/shared/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,7 +34,7 @@ export function InvoiceForm({
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="invoiceNumber">Invoice Number</Label>
+              <Label htmlFor="invoiceNumber">Voucher Number</Label>
               <Input
                 id="invoiceNumber"
                 data-testid="input-invoice-number"
@@ -96,28 +96,15 @@ export function InvoiceForm({
               rows={3}
             />
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="businessEmail">Email</Label>
-              <Input
-                id="businessEmail"
-                data-testid="input-business-email"
-                type="email"
-                value={invoice.businessEmail}
-                onChange={(e) => updateInvoice({ businessEmail: e.target.value })}
-                placeholder="billing@acme.com"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="businessPhone">Phone</Label>
-              <Input
-                id="businessPhone"
-                data-testid="input-business-phone"
-                value={invoice.businessPhone}
-                onChange={(e) => updateInvoice({ businessPhone: e.target.value })}
-                placeholder="+1 (555) 123-4567"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="businessPhone">Phone</Label>
+            <Input
+              id="businessPhone"
+              data-testid="input-business-phone"
+              value={invoice.businessPhone}
+              onChange={(e) => updateInvoice({ businessPhone: e.target.value })}
+              placeholder="+1 (555) 123-4567"
+            />
           </div>
         </CardContent>
       </Card>
@@ -152,14 +139,13 @@ export function InvoiceForm({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="clientEmail">Email</Label>
+            <Label htmlFor="clientPhone">Phone Number</Label>
             <Input
-              id="clientEmail"
-              data-testid="input-client-email"
-              type="email"
-              value={invoice.clientEmail}
-              onChange={(e) => updateInvoice({ clientEmail: e.target.value })}
-              placeholder="contact@client.com"
+              id="clientPhone"
+              data-testid="input-client-phone"
+              value={invoice.clientPhone}
+              onChange={(e) => updateInvoice({ clientPhone: e.target.value })}
+              placeholder="+1 (555) 987-6543"
             />
           </div>
         </CardContent>
@@ -208,7 +194,17 @@ export function InvoiceForm({
                       onChange={(e) => updateLineItem(item.id, { quantity: parseFloat(e.target.value) || 0 })}
                     />
                   </div>
-                  <div className="col-span-4 space-y-2">
+                  <div className="col-span-3 space-y-2">
+                    <Label htmlFor={`unit-${item.id}`}>Unit</Label>
+                    <Input
+                      id={`unit-${item.id}`}
+                      data-testid={`input-unit-${index}`}
+                      value={item.unit}
+                      onChange={(e) => updateLineItem(item.id, { unit: e.target.value })}
+                      placeholder="pcs"
+                    />
+                  </div>
+                  <div className="col-span-3 space-y-2">
                     <Label htmlFor={`rate-${item.id}`}>Rate</Label>
                     <Input
                       id={`rate-${item.id}`}
@@ -220,7 +216,7 @@ export function InvoiceForm({
                       onChange={(e) => updateLineItem(item.id, { rate: parseFloat(e.target.value) || 0 })}
                     />
                   </div>
-                  <div className="col-span-3 space-y-2">
+                  <div className="col-span-2 space-y-2">
                     <Label>Amount</Label>
                     <div className="h-9 flex items-center font-mono text-sm text-muted-foreground">
                       ${(item.quantity * item.rate).toFixed(2)}

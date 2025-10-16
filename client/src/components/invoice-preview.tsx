@@ -1,4 +1,4 @@
-import { Invoice } from "@shared/schema";
+import { Invoice } from "@/shared/schema";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { forwardRef } from "react";
@@ -48,9 +48,6 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       {invoice.businessAddress}
                     </p>
                   )}
-                  {invoice.businessEmail && (
-                    <p className="text-sm text-muted-foreground">{invoice.businessEmail}</p>
-                  )}
                   {invoice.businessPhone && (
                     <p className="text-sm text-muted-foreground">{invoice.businessPhone}</p>
                   )}
@@ -59,7 +56,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
 
               <div className="space-y-2 text-right sm:text-right">
                 <div>
-                  <p className="text-sm text-muted-foreground">Invoice Number</p>
+                  <p className="text-sm text-muted-foreground">Voucher Number</p>
                   <p className="font-mono font-semibold">{invoice.invoiceNumber}</p>
                 </div>
                 <div>
@@ -86,8 +83,8 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     {invoice.clientAddress}
                   </p>
                 )}
-                {invoice.clientEmail && (
-                  <p className="text-sm text-muted-foreground">{invoice.clientEmail}</p>
+                {invoice.clientPhone && (
+                  <p className="text-sm text-muted-foreground">{invoice.clientPhone}</p>
                 )}
               </div>
             </div>
@@ -98,6 +95,9 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                   <tr className="border-b">
                     <th className="text-left py-3 text-sm font-semibold text-muted-foreground">
                       Description
+                    </th>
+                    <th className="text-right py-3 text-sm font-semibold text-muted-foreground w-24">
+                      Unit
                     </th>
                     <th className="text-right py-3 text-sm font-semibold text-muted-foreground w-24">
                       Qty
@@ -116,6 +116,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                       <td className="py-3 text-sm">
                         {item.description || <span className="text-muted-foreground italic">No description</span>}
                       </td>
+                      <td className="py-3 text-sm text-right">{item.unit}</td>
                       <td className="py-3 text-sm text-right font-mono">{item.quantity}</td>
                       <td className="py-3 text-sm text-right font-mono">
                         ${item.rate.toFixed(2)}
@@ -140,7 +141,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                     <span className="text-sm text-muted-foreground">
                       Tax ({invoice.taxRate}%):
                     </span>
-                    <span className="font-mono font-medium" data-testid="text-tax">${tax.toFixed(2)}</span>
+                    <span className="font-mono font-medium" data-testid="text-tax">pkr{tax.toFixed(2)}</span>
                   </div>
                 )}
                 {discount > 0 && (
@@ -159,7 +160,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
                 <div className="flex justify-between items-center">
                   <span className="text-xl font-semibold">Total:</span>
                   <span className="text-3xl font-bold font-mono text-primary" data-testid="text-total">
-                    ${total.toFixed(2)}
+                    Pkr {total.toFixed(2)}
                   </span>
                 </div>
               </div>

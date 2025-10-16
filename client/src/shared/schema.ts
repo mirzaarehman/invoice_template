@@ -1,5 +1,13 @@
 import { z } from "zod";
 
+export const businessSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  address: z.string(),
+  phone: z.string().optional().or(z.literal("")),
+  currency: z.string(),
+});
+
 export const lineItemSchema = z.object({
   id: z.string(),
   description: z.string(),
@@ -16,12 +24,11 @@ export const invoiceSchema = z.object({
   
   businessName: z.string(),
   businessAddress: z.string(),
-  businessEmail: z.string().email().optional().or(z.literal("")),
   businessPhone: z.string().optional().or(z.literal("")),
   
   clientName: z.string(),
   clientAddress: z.string(),
-  clientEmail: z.string().email().optional().or(z.literal("")),
+  clientPhone: z.string().optional().or(z.literal("")),
   
   lineItems: z.array(lineItemSchema),
   taxRate: z.number().min(0).max(100),
@@ -43,5 +50,6 @@ export const CURRENCIES = [
   { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
 ] as const;
 
+export type Business = z.infer<typeof businessSchema>;
 export type LineItem = z.infer<typeof lineItemSchema>;
 export type Invoice = z.infer<typeof invoiceSchema>;
