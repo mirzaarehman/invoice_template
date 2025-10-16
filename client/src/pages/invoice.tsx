@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Invoice, LineItem } from "@shared/schema";
 import { nanoid } from "nanoid";
 import { InvoiceForm } from "@/components/invoice-form";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { loadBusinessDetails, saveBusinessDetails } from "@/lib/storage";
 
 export default function InvoicePage() {
   const today = new Date().toISOString().split('T')[0];
@@ -17,28 +18,41 @@ export default function InvoicePage() {
   const invoiceRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
+  const savedDetails = loadBusinessDetails();
+
   const [invoice, setInvoice] = useState<Invoice>({
-    invoiceNumber: `INV-${Math.floor(1000 + Math.random() * 9000)}`,
+    voucherNumber: `VCH-${Math.floor(1000 + Math.random() * 9000)}`,
     invoiceDate: today,
     dueDate: futureDate,
+    currency: savedDetails?.currency || "USD",
     
-    businessName: "",
-    businessAddress: "",
-    businessEmail: "",
-    businessPhone: "",
+    businessName: savedDetails?.businessName || "",
+    businessAddress: savedDetails?.businessAddress || "",
+    businessEmail: savedDetails?.businessEmail || "",
+    businessPhone: savedDetails?.businessPhone || "",
     
     clientName: "",
     clientAddress: "",
     clientEmail: "",
     
     lineItems: [
-      { id: nanoid(), description: "", quantity: 1, rate: 0 }
+      { id: nanoid(), description: "", quantity: 1, unit: "pcs", rate: 0 }
     ],
     taxRate: 0,
     discount: 0,
     shipping: 0,
     notes: "",
   });
+
+  useEffect(() => {
+    saveBusinessDetails({
+      businessName: invoice.businessName,
+      businessAddress: invoice.businessAddress,
+      businessEmail: invoice.businessEmail,
+      businessPhone: invoice.businessPhone,
+      currency: invoice.currency,
+    });
+  }, [invoice.businessName, invoice.businessAddress, invoice.businessEmail, invoice.businessPhone, invoice.currency]);
 
   const updateInvoice = (updates: Partial<Invoice>) => {
     setInvoice(prev => ({ ...prev, ...updates }));
@@ -49,7 +63,7 @@ export default function InvoicePage() {
       ...prev,
       lineItems: [
         ...prev.lineItems,
-        { id: nanoid(), description: "", quantity: 1, rate: 0 }
+        { id: nanoid(), description: "", quantity: 1, unit: "pcs", rate: 0 }
       ]
     }));
   };
@@ -115,7 +129,7 @@ export default function InvoicePage() {
         heightLeft -= pdfHeight;
       }
 
-      pdf.save(`${invoice.invoiceNumber}.pdf`);
+      pdf.save(`${invoice.voucherNumber}.pdf`);
       
       toast({
         title: "PDF Generated",
