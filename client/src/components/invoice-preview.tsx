@@ -57,7 +57,7 @@ export const InvoicePreview = forwardRef<HTMLDivElement, InvoicePreviewProps>(
               <div className="space-y-2 text-right sm:text-right">
                 <div>
                   <p className="text-sm text-muted-foreground">Voucher Number</p>
-                  <p className="font-mono font-semibold">{invoice.invoiceNumber}</p>
+                  <p className="font-mono font-semibold">{invoice.voucherNumber}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Invoice Date</p>

@@ -34,13 +34,13 @@ export function InvoiceForm({
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="invoiceNumber">Voucher Number</Label>
+              <Label htmlFor="voucherNumber">Voucher Number</Label>
               <Input
-                id="invoiceNumber"
-                data-testid="input-invoice-number"
-                value={invoice.invoiceNumber}
-                onChange={(e) => updateInvoice({ invoiceNumber: e.target.value })}
-                placeholder="INV-0001"
+                id="voucherNumber"
+                data-testid="input-voucher-number"
+                value={invoice.voucherNumber}
+                onChange={(e) => updateInvoice({ voucherNumber: e.target.value })}
+                placeholder="VCH-0001"
               />
             </div>
             <div className="space-y-2">
