@@ -70,7 +70,6 @@ export default function InvoicePage() {
     
     businessName: currentBusiness?.name || "",
     businessAddress: currentBusiness?.address || "",
-    businessEmail: currentBusiness?.email || "",
     businessPhone: currentBusiness?.phone || "",
     
     clientName: "",
@@ -93,7 +92,6 @@ export default function InvoicePage() {
         ...prev,
         businessName: currentBusiness.name,
         businessAddress: currentBusiness.address,
-        businessEmail: currentBusiness.email || "",
         businessPhone: currentBusiness.phone || "",
         currency: currentBusiness.currency,
       }));
@@ -107,7 +105,6 @@ export default function InvoicePage() {
         ...currentBusiness,
         name: invoice.businessName,
         address: invoice.businessAddress,
-        email: invoice.businessEmail || "",
         phone: invoice.businessPhone || "",
         currency: invoice.currency,
       };
@@ -116,7 +113,7 @@ export default function InvoicePage() {
         prev.map(b => b.id === selectedBusinessId ? updatedBusiness : b)
       );
     }
-  }, [invoice.businessName, invoice.businessAddress, invoice.businessEmail, invoice.businessPhone, invoice.currency]);
+  }, [invoice.businessName, invoice.businessAddress, invoice.businessPhone, invoice.currency]);
 
   const handleSelectBusiness = (businessId: string) => {
     setSelectedBusinessId(businessId);
@@ -128,7 +125,6 @@ export default function InvoicePage() {
       id: nanoid(),
       name: "New Business",
       address: "",
-      email: "",
       phone: "",
       currency: "USD",
     };
